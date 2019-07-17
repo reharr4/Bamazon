@@ -23,37 +23,52 @@ connection.connect(function (err) {
 });
 
 // prints products table data
-function queryAllProducts(){
-    connection.query("SELECT * FROM products", function(err, res){
+function queryAllProducts() {
+    connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        for (var i =0; i<res.length; i++){
+        for (var i = 0; i < res.length; i++) {
             console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
         }
-        console.log("-----------------");
+        console.log("------Bamazon-------");
     });
-} 
+    connection.end();
+}
 // // function that prompts user for action
 // function start() {
-// inquirer
-// .prompt([
-//     {
-//     name: "product",
-//     type: "input",
-//     message: "What is the ID of the product you would like to buy?"
-// },
-// {
-//     name: "quantity",
-//     typer: "input",
-//     message: "How many would you like to purchase?"
-// },
-// // ask the user to confirm product and quantity for purchase
-// {
-//     type: "confirm",
-//     message: "Are you sure?",
-//     name: "confirm",
-//     default: true
-// }
-// ])
+inquirer
+    .prompt([
+        {
+            name: "product",
+            type: "input",
+            message: "What is the ID of the product you would like to buy?",
+            // require integer for product id
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return ("Please enter a number.");
+            }
+        },
+        {
+            name: "quantity",
+            typer: "input",
+            message: "How many would you like to purchase?",
+                // require an integer be entered for quantity
+            validate: function (value) {
+                if (isNaN(value) === false) {
+                    return true;
+                }
+                return ("Please enter a number.");
+            }
+        },
+        // // ask the user to confirm product and quantity for purchase
+        {
+            type: "confirm",
+            message: "Are you sure?",
+            name: "confirm",
+            default: true
+        }
+    ])
 // .then (function(answer){
 
 //     console.log(answer);
