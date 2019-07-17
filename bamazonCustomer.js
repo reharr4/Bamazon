@@ -16,49 +16,52 @@ var connection = mysql.createConnection({
 // connect to the mysql server and database
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("-----Welcome to Bamazon------")
-    // run start function after connection is mage
+    console.log("-----Welcome to Bamazon------");
+    queryAllProducts();
+    // run start function after connection is made
     // start();
 });
 
-// creat table to display product data
-// var displayProducts = function(){
-//     var query = "Select * FROM products";
-//     connection.query(query, function(err, res){
-//         if (err) throw err;
-//         var displayTable = new Table ({
-
-//         })
-//     })
-// }
+// prints products table data
+function queryAllProducts(){
+    connection.query("SELECT * FROM products", function(err, res){
+        if (err) throw err;
+        for (var i =0; i<res.length; i++){
+            console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+        }
+        console.log("-----------------");
+    });
+} 
 // // function that prompts user for action
 // function start() {
-inquirer
-.prompt([
-    {
-    name: "product",
-    type: "input",
-    message: "What is the ID of the product you would like to buy?"
-},
-{
-    name: "quantity",
-    typer: "input",
-    message: "How many would you like to purchase?"
-},
-// ask the user to confirm product and quantity for purchase
-{
-    type: "confirm",
-    message: "Are you sure?",
-    name: "confirm",
-    default: true
-}
-])
-// .then (function(inquirerResponse){
+// inquirer
+// .prompt([
+//     {
+//     name: "product",
+//     type: "input",
+//     message: "What is the ID of the product you would like to buy?"
+// },
+// {
+//     name: "quantity",
+//     typer: "input",
+//     message: "How many would you like to purchase?"
+// },
+// // ask the user to confirm product and quantity for purchase
+// {
+//     type: "confirm",
+//     message: "Are you sure?",
+//     name: "confirm",
+//     default: true
+// }
+// ])
+// .then (function(answer){
 
-    // console.log(inquirerResponse)
-//     if(){
-
+//     console.log(answer);
+// //     // if user confirms, check stock quantity
+//     if(answer.confirm){
+//         console.log();
 //     }
+// 
 //     else if(){
 
 //     } else {
