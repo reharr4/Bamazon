@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
     // username
     user: "root",
     // password
-    password: "",
+    password: "L!sb0n13",
     database: "bamazon_db"
 });
 
@@ -33,20 +33,29 @@ connection.connect(function (err) {
 // }
 // // function that prompts user for action
 // function start() {
-// inquirer
-// .prompt([
-//     {
-//     name: "idNumber",
-//     type: "input",
-//     message: "What is the ID of the product you would like to buy?"
-// },
-// {
-//     name: "quantity",
-//     typer: "input",
-//     message: "How many would you like to purchase?"
-// }
-// ])
-// .then (function(user){
+inquirer
+.prompt([
+    {
+    name: "product",
+    type: "input",
+    message: "What is the ID of the product you would like to buy?"
+},
+{
+    name: "quantity",
+    typer: "input",
+    message: "How many would you like to purchase?"
+},
+// ask the user to confirm product and quantity for purchase
+{
+    type: "confirm",
+    message: "Are you sure?",
+    name: "confirm",
+    default: true
+}
+])
+// .then (function(inquirerResponse){
+
+    // console.log(inquirerResponse)
 //     if(){
 
 //     }
@@ -94,4 +103,4 @@ connection.connect(function (err) {
 //         })
 //     })
 // }
-connection.end();
+// connection.end();
