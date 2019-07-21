@@ -65,26 +65,43 @@ function buyProduct() {
                     }
                     return ("Please enter a number.");
                 }
-            },
+            }
         ])
         .then(function (answer) {
+            var selectedProductID = answer.productID;
             // query database for selected product
-            var query = "SELECT stock_quantity, price FROM products WHERE ?";
-            connection.query(query, { item_id: answer.productID }, function (err, res) {
-                if (err) throw err;
-                var available_stock = res[0].stock_quantity;
-                var price_per_unit = res[0].price;
-                // check if enough inventory for user's purchase
-                if (available_stock >= answer.quantity) {
-                    // process user request
-                    updateStock(available_stock, price_per_unit, answer.productID, answer.quantity);
-                } else {
-                    // tell user there is not enough stock
-                    console.log("Sorry, stock is too low. Please check back.");
-                    //let user request new product if desired
-                    buyProduct();
+            connection.query("SELECT stock_quantity, price FROM products WHERE item_id=?",
+                [selectedProductID],
+                function (err, res) {
+                    if (err) throw err;
+                    
+                    // check if enough inventory for user's purchase
+                    if (answer.quantity > res[0].stock_quantity) {
+                        // tell user there is not enough stock
+                        console.log("Sorry, stock is too low. Please check back.");
+                    } else {
+                        // complete user's purchase and update stock quantities
+                        var updateStock = 
+                            res[0].stock_quantity - parseFloat(answer.quantity);
+                            connection.query(
+                                "UPDATE products SET ? WHERE ?",
+                                [
+                                    {
+                                        stock_quantity: updateStock
+                                    },
+                                    {
+                                        item_id: selectedProductID
+                                    }
+                                ],
+                                function(err, res){
+                                    if (err) throw err;
+                                }
+                            );
+                            var totalCost = res[0].price * answer.quantity;
+                            console.log("Your total is: $" + totalCost);
                 }
-
-            });
-            });
+                // connection end
+                // displayProducts();
+        });
+    });
 }
