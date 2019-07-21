@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
     // username
     user: "root",
     // password
-    password: "",
+    password: "L!sb0n13",
     database: "bamazon_db"
 });
 
@@ -74,34 +74,33 @@ function buyProduct() {
                 [selectedProductID],
                 function (err, res) {
                     if (err) throw err;
-                    
+
                     // check if enough inventory for user's purchase
                     if (answer.quantity > res[0].stock_quantity) {
                         // tell user there is not enough stock
                         console.log("Sorry, stock is too low. Please check back.");
                     } else {
                         // complete user's purchase and update stock quantities
-                        var updateStock = 
+                        var updateStock =
                             res[0].stock_quantity - parseFloat(answer.quantity);
-                            connection.query(
-                                "UPDATE products SET ? WHERE ?",
-                                [
-                                    {
-                                        stock_quantity: updateStock
-                                    },
-                                    {
-                                        item_id: selectedProductID
-                                    }
-                                ],
-                                function(err, res){
-                                    if (err) throw err;
+                        connection.query(
+                            "UPDATE products SET ? WHERE ?",
+                            [
+                                {
+                                    stock_quantity: updateStock
+                                },
+                                {
+                                    item_id: selectedProductID
                                 }
-                            );
-                            var totalCost = res[0].price * answer.quantity;
-                            console.log("Your total is: $" + totalCost);
-                }
-                // connection end
-                // displayProducts();
+                            ],
+                            function (err, res) {
+                                if (err) throw err;
+                            }
+                        );
+                        var totalCost = res[0].price * answer.quantity;
+                        console.log("Your total is: $" + totalCost);
+                    }
+
+                });
         });
-    });
 }
